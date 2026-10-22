@@ -42,7 +42,7 @@ text{font-family:Helvetica,Arial,sans-serif;dominant-baseline:central}
 <script>
 const C={hot:'#FF4040',cold:'#3D9BFF',white:'#FFFFFF',acc:'#2FA8FF',crack:'#FFB347',neutral:'#4D5B75',muted:'#8FA3C7',air:'#C9A7FF',warm:'#FFB347',ok:'#7CFC9A',err:'#FF6B6B',up:'#FF7A45',down:'#3D9BFF',level:'#9AA5B8',level30:'#333A4A'};
 const K={HOT:75,LO:68,HI:74,WET:60,DRY:40,DT:1,DRH:3,TREND:60};
-const TS='https://api.thingspeak.com/channels/3540018/feeds.json?minutes=70&status=true&api_key=YMSK4D01YKL2YGCK';
+const TS='https://api.thingspeak.com/channels/3540018/feeds.json?results=160&status=true&api_key=YMSK4D01YKL2YGCK';
 const OM='https://api.open-meteo.com/v1/forecast?latitude=44.601254&longitude=-75.183049&current=temperature_2m,relative_humidity_2m&hourly=temperature_2m,relative_humidity_2m&past_hours=2&forecast_hours=1&temperature_unit=fahrenheit&timezone=America%2FNew_York';
 const $=id=>document.getElementById(id),NS='http://www.w3.org/2000/svg';
 function el(t,a,p){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);p&&p.appendChild(e);return e}
@@ -83,7 +83,8 @@ function render(){const s=S;
  const ok=!isNaN(s.eco2)&&!isNaN(s.tvoc);$('air').textContent=ok?`eCO2 ${Math.round(s.eco2)} ppm\u00a0\u00a0\u00a0\u00a0TVOC ${Math.round(s.tvoc)} ppb`:'eCO2 -- ppm\u00a0\u00a0\u00a0\u00a0TVOC -- ppb';$('air').setAttribute('fill',ok?C.air:C.muted);
  const d=s.rT-s.oT;$('dl').textContent=isNaN(d)?'':(d>=0?'+':'')+d.toFixed(1)+'°F vs outside';
  const st=isNaN(s.rT)?['No sensor data',C.err]:s.sim?['SIMULATED (Canton NY weather)',C.warm]:['AHT10 OK',C.ok];$('st').textContent=st[0];$('st').setAttribute('fill',st[1])}
-async function getRoom(){try{const j=await (await fetch(TS,{cache:'no-store'})).json();
+async function getRoom(){try{const j=await (await fetch(TS+'&_='+Date.now(),{cache:'no-store'})).json();
+  {const nt=Math.max(...(j.feeds||[]).map(f=>Date.parse(f.created_at)).filter(isFinite));if(isFinite(S.tLast)&&!(nt>=S.tLast))return;}
   const rows=(j.feeds||[]).map(e=>({t:Date.parse(e.created_at),T:num(e.field1),H:num(e.field2),E:num(e.field3),V:num(e.field4),OT:num(e.field5),OH:num(e.field6),st:e.status}));
   const a=lp(rows,'T'),b=lp(rows,'H'),c=lp(rows,'OT'),d=lp(rows,'OH');
   const tl=Math.max(...rows.map(r=>r.t).filter(isFinite));
