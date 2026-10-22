@@ -10,7 +10,7 @@ footer{font-size:13px;color:#8FA3C7;margin:6px;display:flex;gap:12px;align-items
 footer a{color:#7FDBCA}
 @media (max-height:360px),(max-width:360px){footer{display:none}svg{width:min(98vw,98vh)}}
 text{font-family:Helvetica,Arial,sans-serif;dominant-baseline:central}
-</style><noscript><meta http-equiv="refresh" content="30"></noscript></head><body>
+</style></head><body>
 <svg id="d" viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
 <defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#070B16"/><stop offset="1" stop-color="#111A33"/></linearGradient><clipPath id="pill"><rect x="208" y="89" width="248" height="80" rx="40"/></clipPath></defs>
 <circle cx="400" cy="400" r="398" fill="url(#bg)" stroke="#2A3657" stroke-width="3"/>
@@ -96,5 +96,4 @@ async function getOut(){if(!isNaN(S.oT)&&!isNaN(S.oH))return;try{const j=await (
   if(isNaN(S.oH))Object.assign(S,{oH:num(j.current.relative_humidity_2m),oH60:num(j.hourly.relative_humidity_2m[k])})}catch(e){}}
 async function tick(){await getRoom();await getOut();render()}
 tick();setInterval(tick,30000);
-setTimeout(function(){var u=new URL(location.href);u.searchParams.set('r',Date.now());location.replace(u.toString());},30000);
 </script></body></html>
